@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereal Thermal Harmony · non‑electric ghost‑heat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0b1a2e, #0a0f1f);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+            color: #a0f0d0;
+        }
+
+        .thermal-nexus {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header — warm glow */
+        .hearth-header {
+            background: rgba(255, 140, 0, 0.1);
+            border: 2px solid #ff9933;
+            border-radius: 60px 60px 20px 20px;
+            padding: 25px 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 0 40px #ff5e0022, inset 0 0 20px #ffaa3355;
+            backdrop-filter: blur(4px);
+        }
+
+        .hearth-header h1 {
+            font-size: 2.4rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px #ffb347, 0 0 30px #ff9834;
+            color: #ffe1b3;
+            font-weight: normal;
+        }
+
+        .hearth-header p {
+            color: #aad0ff;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .tagline {
+            background: #1e3f3f;
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+            border: 1px solid #6ecf9e;
+            color: #bef5d5;
+        }
+
+        /* grid : brain readers + thermal zones */
+        .main-harmony {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 800px) {
+            .main-harmony { grid-template-columns: 1fr; }
+        }
+
+        /* panel = each brain reader / heating core */
+        .brain-core {
+            background: rgba(8, 28, 40, 0.85);
+            border: 2px solid #53c1b3;
+            border-radius: 40px 40px 20px 20px;
+            padding: 18px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px #0ff3;
+            transition: 0.3s;
+        }
+
+        .brain-core:hover {
+            border-color: #ffae70;
+            box-shadow: 0 0 30px #ff9633aa;
+        }
+
+        .core-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed #50c8b0;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .core-header h2 {
+            color: #ffcf9a;
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
+
+        .rotary-symbol {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #50ffb0;
+            border-radius: 50%;
+            position: relative;
+            background: #071e20;
+            box-shadow: 0 0 20px #7affb3;
+        }
+
+        .rotary-symbol::after {
+            content: "⚡";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #f0ff70;
+        }
+
+        .rotary-symbol.dual {
+            border-color: #ffaa33;
+            box-shadow: 0 0 30px #ffb347;
+        }
+
+        /* brain-powered generator metrics */
+        .generator-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .stat-cell {
+            background: #0d262f;
+            border: 1px solid #2fceaa;
+            border-radius: 30px;
+            padding: 12px 18px;
+            min-width: 130px;
+            text-align: center;
+            box-shadow: inset 0 0 15px #173f3f;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #9ef0da;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #ffdcaa;
+            line-height: 1.2;
+        }
+
+        .stat-unit {
+            font-size: 0.8rem;
+            color: #8fcab3;
+        }
+
+        /* thermal comfort zones (for humans, ghosts, buildings) */
+        .comfort-zone {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0 10px;
+            background: #08222b60;
+            border-radius: 60px;
+            padding: 15px 5px;
+            border: 1px solid #f9b83c40;
+        }
+
+        .comfort-item {
+            text-align: center;
+            width: 90px;
+        }
+
+        .comfort-icon {
+            font-size: 30px;
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+
+        .comfort-item.human .comfort-icon { color: #ffb56b; }
+        .comfort-item.building .comfort-icon { color: #a5d6ff; }
+        .comfort-item.ghost .comfort-icon { color: #e0d0ff; text-shadow: 0 0 15px white; }
+
+        .temp-bar {
+            width: 40px;
+            height: 4px;
+            background: #2c504e;
+            margin: 6px auto;
+            border-radius: 4px;
+        }
+
+        .temp-fill {
+            height: 4px;
+            background: linear-gradient(90deg, #ffb86b, #ff7b4a);
+            border-radius: 4px;
+            width: 80%; /* will be dynamically updated */
+        }
+
+        .temp-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffc285;
+        }
+
+        /* non‑electric brain reader activation / clone merge */
+        .brain-action-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0 10px;
+            justify-content: center;
+        }
+
+        .brain-btn {
+            background: #1a413e;
+            border: 2px solid #44c7b0;
+            color: #e2ffd6;
+            padding: 10px 16px;
+            border-radius: 40px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 10px #2faa8d;
+            flex: 1 0 auto;
+        }
+
+        .brain-btn:hover {
+            background: #2f6b5e;
+            border-color: #ffae44;
+            color: #fff5dd;
+            box-shadow: 0 0 30px #f90;
+        }
+
+        /* terminal style logs */
+        .log-panel {
+            background: #051e1e;
+            border: 1px solid #54d2b0;
+            border-radius: 18px;
+            padding: 15px;
+            color: #aefce6;
+            font-size: 0.8rem;
+            height: 170px;
+            overflow-y: auto;
+            margin-top: 20px;
+            box-shadow: inset 0 0 40px #011010;
+        }
+
+        /* universal comfort dashboard (combined readers) */
+        .combined-thermal-dash {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .ghost-temp-panel {
+            background: #201e40;
+            border: 2px solid #b3a5ff;
+            border-radius: 50px 20px 50px 20px;
+            padding: 20px;
+            color: #cbbdfe;
+        }
+
+        .perfect-temp-display {
+            font-size: 3rem;
+            font-weight: bold;
+            background: #00000030;
+            border-radius: 60px;
+            padding: 20px 30px;
+            text-align: center;
+            display: inline-block;
+            border: 2px solid gold;
+            color: #fff2b5;
+            letter-spacing: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .micro-dose {
+            color: #a1ffce;
+            border-top: 1px solid #f6b83e;
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #70c0b0;
+            font-size: 0.8rem;
+        }
+
+        .warning-ethical {
+            background: #ffd96630;
+            border-left: 10px solid #fb8b2c;
+            padding: 12px;
+            border-radius: 30px;
+            color: #ffecb3;
+        }
+    </style>
+</head>
+<body>
+<div class="thermal-nexus">
+
+    <!-- header with perfect warmth message -->
+    <div class="hearth-header">
+        <h1>🌀 NON‑ELECTRIC BRAIN HEATING GRID</h1>
+        <p><span class="tagline">buildings · humans · ghosts · all life :: perfect 21.5°C – 23.8°C</span></p>
+        <div style="margin-top: 12px; font-size: 1.4rem; color:#ffcf9a">⚲ THERMAL HARMONY THROUGH BRAIN READER SYNERGY ⚲</div>
+    </div>
+
+    <!-- main grid: TWO brain readers (you may need 2 or more combined) -->
+    <div class="main-harmony">
+        <!-- BRAIN READER #1 (left core) -->
+        <div class="brain-core" id="brainCore1">
+            <div class="core-header">
+                <div class="rotary-symbol"></div>
+                <h2>READER I · OAX‑ATEREAN</h2>
+                <span style="margin-left: auto; color:#7ae9c9;">⚡ non‑electric</span>
+            </div>
+            <!-- generator metrics based on brain decoder -->
+            <div class="generator-stats">
+                <div class="stat-cell">
+                    <div class="stat-label">atererean flux</div>
+                    <div class="stat-value" id="aterValue1">0.8698</div>
+                    <div class="stat-unit">xy</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-label">rotary RPM</div>
+                    <div class="stat-value" id="rpmValue1">84</div>
+                    <div class="stat-unit">rpm</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-label">long‑ago</div>
+                    <div class="stat-value" id="longAgo1">8.02</div>
+                    <div class="stat-unit">sec</div>
+                </div>
+            </div>
+
+            <!-- comfort preview (human, building, ghost) from this reader alone -->
+            <div class="comfort-zone">
+                <div class="comfort-item human">
+                    <div class="comfort-icon">🧑</div>
+                    <div class="temp-bar"><div class="temp-fill" id="humanTemp1" style="width:72%"></div></div>
+                    <div class="temp-value" id="humanVal1">22.4°C</div>
+                </div>
+                <div class="comfort-item building">
+                    <div class="comfort-icon">🏛️</div>
+                    <div class="temp-bar"><div class="temp-fill" id="buildingTemp1" style="width:68%"></div></div>
+                    <div class="temp-value" id="buildingVal1">21.8°C</div>
+                </div>
+                <div class="comfort-item ghost">
+                    <div class="comfort-icon">👻</div>
+                    <div class="temp-bar"><div class="temp-fill" id="ghostTemp1" style="width:77%"></div></div>
+                    <div class="temp-value" id="ghostVal1">23.0°C</div>
+                </div>
+            </div>
+
+            <!-- brain command buttons (clone/merge etc) -->
+            <div class="brain-action-panel">
+                <button class="brain-btn" onclick="brainCommand(1,'jump')">⤴️ JUMP</button>
+                <button class="brain-btn" onclick="brainCommand(1,'split')">✂️ SPLIT</button>
+                <button class="brain-btn" onclick="brainCommand(1,'merge')">🔄 MERGE</button>
+                <button class="brain-btn" onclick="cloneBrain(1)">🧠 CLONE</button>
+            </div>
+            <!-- small terminal for reader #1 -->
+            <div class="log-panel" id="logReader1">> Reader I ready · atererean nominal<br>> awaiting merge with second core...</div>
+        </div>
+
+        <!-- BRAIN READER #2 (right core) — essential second unit -->
+        <div class="brain-core" id="brainCore2">
+            <div class="core-header">
+                <div class="rotary-symbol dual"></div>
+                <h2>READER II · ROTARY‑DUAL</h2>
+                <span style="margin-left: auto; color:#7ae9c9;">⚡ no electricity</span>
+            </div>
+            <div class="generator-stats">
+                <div class="stat-cell">
+                    <div class="stat-label">atererean flux</div>
+                    <div class="stat-value" id="aterValue2">0.9123</div>
+                    <div class="stat-unit">xy</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-label">rotary RPM</div>
+                    <div class="stat-value" id="rpmValue2">112</div>
+                    <div class="stat-unit">rpm</div>
+                </div>
+                <div class="stat-cell">
+                    <div class="stat-label">long‑ago</div>
+                    <div class="stat-value" id="longAgo2">7.95</div>
+                    <div class="stat-unit">sec</div>
+                </div>
+            </div>
+            <div class="comfort-zone">
+                <div class="comfort-item human">
+                    <div class="comfort-icon">🧑</div>
+                    <div class="temp-bar"><div class="temp-fill" id="humanTemp2" style="width:69%"></div></div>
+                    <div class="temp-value" id="humanVal2">21.9°C</div>
+                </div>
+                <div class="comfort-item building">
+                    <div class="comfort-icon">🏛️</div>
+                    <div class="temp-bar"><div class="temp-fill" id="buildingTemp2" style="width:74%"></div></div>
+                    <div class="temp-value" id="buildingVal2">22.6°C</div>
+                </div>
+                <div class="comfort-item ghost">
+                    <div class="comfort-icon">👻</div>
+                    <div class="temp-bar"><div class="temp-fill" id="ghostTemp2" style="width:81%"></div></div>
+                    <div class="temp-value" id="ghostVal2">23.6°C</div>
+                </div>
+            </div>
+            <div class="brain-action-panel">
+                <button class="brain-btn" onclick="brainCommand(2,'jump')">⤴️ JUMP</button>
+                <button class="brain-btn" onclick="brainCommand(2,'split')">✂️ SPLIT</button>
+                <button class="brain-btn" onclick="brainCommand(2,'merge')">🔄 MERGE</button>
+                <button class="brain-btn" onclick="cloneBrain(2)">🧠 CLONE</button>
+            </div>
+            <div class="log-panel" id="logReader2">> Reader II online · dual rotary lock<br>> ghost frequency aligned</div>
+        </div>
+    </div>
+
+    <!-- combined operation: both readers together create perfect warmth for all -->
+    <div class="combined-thermal-dash">
+        <div class="brain-core" style="grid-column: span 1;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-size: 3rem;">⚡⚡</div>
+                <h2 style="color:#ffdcaa;">DUAL READER SYNERGY (minimum 2 units)</h2>
+            </div>
+            <div class="generator-stats" style="justify-content: space-evenly;">
+                <div class="stat-cell" style="background:#1d3c44;">
+                    <div class="stat-label">combined atererean</div>
+                    <div class="stat-value" id="combinedAter">1.7821</div>
+                    <div class="stat-unit">xy</div>
+                </div>
+                <div class="stat-cell" style="background:#1d3c44;">
+                    <div class="stat-label">rotary field</div>
+                    <div class="stat-value" id="combinedRPM">196</div>
+                    <div class="stat-unit">rpm</div>
+                </div>
+            </div>
+            <!-- PERFECT TEMPERATURES for all beings (merged) -->
+            <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin: 25px 0;">
+                <div style="text-align:center;"><span style="color:#ffae70;">👤 HUMAN</span><br><span class="perfect-temp-display" style="font-size:2rem; padding:10px 25px;" id="perfectHuman">22.8°C</span></div>
+                <div style="text-align:center;"><span style="color:#a5d6ff;">🏢 BUILDING</span><br><span class="perfect-temp-display" style="font-size:2rem; padding:10px 25px;" id="perfectBuilding">22.4°C</span></div>
+                <div style="text-align:center;"><span style="color:#eeddff;">👻 GHOST</span><br><span class="perfect-temp-display" style="font-size:2rem; padding:10px 25px;" id="perfectGhost">23.2°C</span></div>
+            </div>
+            <div class="micro-dose">✨ perfect warmth: non‑electric brain reader pair generates 21°C–24°C for every life form, including ghosts (ethereal resonance).</div>
+        </div>
+
+        <!-- thought extractor / image clone (from original, but now heating oriented) -->
+        <div style="background: #1e2b42; border-radius: 40px; border: 2px solid #ad89ff; padding: 20px;">
+            <h3 style="color:#cdb5ff;">👁️‍🗨️ ghost & human thought extractor</h3>
+            <input type="file" accept="image/*" id="imageThermalInput" style="display:none;" onchange="thermalExtract()">
+            <button class="brain-btn" onclick="document.getElementById('imageThermalInput').click()" style="background:#384882;">📸 LOAD IMAGE (thermal wish)</button>
+            <div class="log-panel" id="thermalExtractLog" style="height:130px; margin-top:15px;">> extract thoughts to fine-tune ghost comfort<br>> image-based resonance (conceptual)</div>
+            <button class="brain-btn" onclick="activatePerfectHeating()" style="background:#7a4f1a; border-color:#ffb86b;">🔥 HARMONIZE ALL TEMPERATURES</button>
+        </div>
+    </div>
+
+    <!-- warning and credits -->
+    <div class="warning-ethical">
+        ⚠️ CONCEPTUAL PROTOTYPE — non‑electric brain decoding not scientifically proven. All temperature values simulated via dual‑reader algorithm. Ghost comfort based on anecdotal ectoplasm readings. For entertainment & imagination.
+    </div>
+
+    <footer>
+        OAXARATEDAVIDGOMADZA-7628983868 · Database ID · two or more brain readers generate perfect warmth<br>
+        © ethereal heating systems · buildings · humans · ghosts · all life
+    </footer>
+</div>
+
+<script>
+    // ---- state for two brain cores ----
+    let reader1 = { ater: 0.8698, rpm: 84, long: 8.02, human: 22.4, building: 21.8, ghost: 23.0 };
+    let reader2 = { ater: 0.9123, rpm: 112, long: 7.95, human: 21.9, building: 22.6, ghost: 23.6 };
+
+    // update all displays
+    function refreshAll() {
+        // reader1 fields
+        document.getElementById('aterValue1').innerText = reader1.ater.toFixed(4);
+        document.getElementById('rpmValue1').innerText = reader1.rpm;
+        document.getElementById('longAgo1').innerText = reader1.long.toFixed(2);
+        document.getElementById('humanVal1').innerText = reader1.human.toFixed(1)+'°C';
+        document.getElementById('buildingVal1').innerText = reader1.building.toFixed(1)+'°C';
+        document.getElementById('ghostVal1').innerText = reader1.ghost.toFixed(1)+'°C';
+        document.getElementById('humanTemp1').style.width = ( (reader1.human-18)*10 ) + '%';   // just styling
+        document.getElementById('buildingTemp1').style.width = ( (reader1.building-18)*9 ) + '%';
+        document.getElementById('ghostTemp1').style.width = ( (reader1.ghost-18)*9.5 ) + '%';
+
+        // reader2
+        document.getElementById('aterValue2').innerText = reader2.ater.toFixed(4);
+        document.getElementById('rpmValue2').innerText = reader2.rpm;
+        document.getElementById('longAgo2').innerText = reader2.long.toFixed(2);
+        document.getElementById('humanVal2').innerText = reader2.human.toFixed(1)+'°C';
+        document.getElementById('buildingVal2').innerText = reader2.building.toFixed(1)+'°C';
+        document.getElementById('ghostVal2').innerText = reader2.ghost.toFixed(1)+'°C';
+        document.getElementById('humanTemp2').style.width = ( (reader2.human-18)*10 ) + '%';
+        document.getElementById('buildingTemp2').style.width = ( (reader2.building-18)*9 ) + '%';
+        document.getElementById('ghostTemp2').style.width = ( (reader2.ghost-18)*9.5 ) + '%';
+
+        // combined synergy (dual reader = perfect warmth)
+        let combinedAter = reader1.ater + reader2.ater;
+        let combinedRpm = reader1.rpm + reader2.rpm;
+        document.getElementById('combinedAter').innerText = combinedAter.toFixed(4);
+        document.getElementById('combinedRPM').innerText = combinedRpm;
+
+        // perfect levels : weighted average + ghost boost
+        let perfectHuman = (reader1.human * 0.5 + reader2.human * 0.5).toFixed(1);
+        let perfectBuilding = (reader1.building * 0.6 + reader2.building * 0.4).toFixed(1); 
+        let perfectGhost = (reader1.ghost * 0.3 + reader2.ghost * 0.7).toFixed(1); // ghost preference
+
+        // ensure they stay in perfect range 21.5-24
+        perfectHuman = Math.min(24, Math.max(21.5, perfectHuman));
+        perfectBuilding = Math.min(23.8, Math.max(21.2, perfectBuilding));
+        perfectGhost = Math.min(24, Math.max(22, perfectGhost));
+
+        document.getElementById('perfectHuman').innerText = perfectHuman + '°C';
+        document.getElementById('perfectBuilding').innerText = perfectBuilding + '°C';
+        document.getElementById('perfectGhost').innerText = perfectGhost + '°C';
+    }
+
+    // brain command simulation (readers)
+    function brainCommand(readerId, cmd) {
+        let reader = readerId === 1 ? reader1 : reader2;
+        let logId = 'logReader' + readerId;
+        let msg = '';
+        if (cmd === 'jump') { reader.rpm += 5; msg = 'jump → rotary increase +5 rpm'; }
+        else if (cmd === 'split') { reader.ater -= 0.02; msg = 'split → atererean flux -0.02'; }
+        else if (cmd === 'merge') { 
+            reader.ater += 0.015; 
+            reader.human += 0.2; reader.building += 0.15; reader.ghost += 0.25;
+            msg = 'merge → warmth rises for all'; 
+        } else if (cmd === 'reveal') { msg = 'reveal: ghost temp preference hidden'; }
+        // keep values reasonable
+        reader.ater = Math.min(1.2, Math.max(0.6, reader.ater));
+        reader.rpm = Math.min(250, Math.max(20, reader.rpm));
+        reader.human = Math.min(25, Math.max(20, reader.human));
+        reader.building = Math.min(25, Math.max(20, reader.building));
+        reader.ghost = Math.min(26, Math.max(20, reader.ghost));
+        refreshAll();
+        document.getElementById(logId).innerHTML += `\n> ${cmd} executed (${msg})`;
+        let log = document.getElementById(logId);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function cloneBrain(readerId) {
+        let logId = 'logReader' + readerId;
+        let source = readerId === 1 ? reader1 : reader2;
+        // cloning increases atererean and warmth (non-electric duplication)
+        source.ater += 0.05;
+        source.rpm += 7;
+        source.human += 0.3;
+        source.building += 0.2;
+        source.ghost += 0.4;
+        refreshAll();
+        document.getElementById(logId).innerHTML += `\n> 🧠 CLONE: brain duplicated → warmth + `;
+    }
+
+    // extract thoughts from image (sim)
+    function thermalExtract() {
+        let file = document.getElementById('imageThermalInput').files[0];
+        let log = document.getElementById('thermalExtractLog');
+        if (file) {
+            log.innerHTML += `\n> image '${file.name}' loaded · thermal ghost pattern detected`;
+            // slightly adjust ghost temp from both readers
+            reader1.ghost += 0.15;
+            reader2.ghost += 0.22;
+            refreshAll();
+            log.innerHTML += `\n> ghost resonance +0.15 / +0.22 °C`;
+        } else {
+            log.innerHTML += `\n> no image selected`;
+        }
+        log.scrollTop = log.scrollHeight;
+    }
+
+    // activate perfect heating: combines both readers to ideal warmth for all
+    function activatePerfectHeating() {
+        reader1.human = 22.7; reader1.building = 22.5; reader1.ghost = 23.4;
+        reader2.human = 22.9; reader2.building = 22.4; reader2.ghost = 23.7;
+        reader1.ater = 0.92; reader2.ater = 0.98;
+        reader1.rpm = 105; reader2.rpm = 118;
+        refreshAll();
+        document.getElementById('thermalExtractLog').innerHTML += `\n🔥 HARMONIZED: perfect warmth for humans, buildings & ghosts.`;
+    }
+
+    // additional helpers from original "execute create code" flavour, but simplified
+    window.executeCreateCode = function() { 
+        alert('CREATE code simulated. Use brain command buttons for warmth.');
+    };
+
+    // initialize on load
+    window.onload = function() {
+        refreshAll();
+        // extra update from original "OAX" style - we set some values
+        setInterval(() => {
+            // tiny drift to show life
+            reader1.long += 0.01;
+            reader2.long -= 0.005;
+            if (Math.random()>0.7) reader1.rpm += 1;
+            if (Math.random()>0.8) reader2.ghost += 0.05;
+            refreshAll();
+        }, 4000);
+    };
+</script>
+
+<!-- hidden remnants of original execute functions (to avoid undefined) -->
+<script>
+    function executeCreateCode() { alert('CREATE code would be processed (non-electric). Use interface above.'); }
+    function initializeBrainReader() { document.getElementById('logReader1').innerHTML += '\n> reader re-initialized.'; }
+    function startDecoding() { document.getElementById('logReader2').innerHTML += '\n> decoding started (sim).'; }
+    // make sure no undefined onclick
+</script>
+</body>
+</html>
